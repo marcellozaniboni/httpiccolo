@@ -9,7 +9,7 @@ This project was initially born for personal needs: I just needed a minimal web 
 
 * Very easy to install: it's just a static binary with no dependencies.
 * Very easy to configure: on first start the user is asked only four questions and the rest of the configuration is done using the administration web interface.
-* All the configuration is saved in three json files within a directory reserved for this purpose. The configuration can be modified from the administration web interface (but the files can also be easily modified manually, if needed). You can reset the configuration pointing to another directory or by simply deleting it.
+* All the configuration is saved in three json files in a directory reserved for this purpose. The configuration can be modified from the administration web interface (but the files can also be easily modified manually, if needed). You can reset the configuration pointing to another directory or by simply deleting it.
 
 ## Status
 

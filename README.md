@@ -25,9 +25,16 @@ The administration web interface can certainly be improved before the version 1.
 5. By default a configuration subdirectory will be created in the same directory as the executable file. If you want to use another path, use the command line argument -c to specify it.
 6. You can run "httpiccolo -h" to have a list of available command line arguments.
 
+## Download binaries
+
+* Windows x86 64-bit [link]
+* Linux x86 64-bit [link]
+* Linux ARM 64-bit [link]
+* Linux ARM 32-bit (armv6l) [link]
+
 ## How to build
 
-Install Go (minimum version 1.19).
+Install Go (minimum version 1.19)
 
 Quick compile and run:
 
@@ -38,10 +45,3 @@ To build an optimized release executable, install [UPX](https://upx.github.io) a
 
 * for Windows: edit build-release.bat and fix UPX path, then run build-release.bat
 * for Linux: run build-release.sh
-
-## Compiled binaries
-
-* Windows x86 64-bit [link]
-* Linux x86 64-bit [link]
-* Linux ARM 64-bit [link]
-* Linux ARM 32-bit (armv6l) [link]

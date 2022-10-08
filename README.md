@@ -19,7 +19,7 @@ The administration web interface can certainly be improved before the version 1.
 
 ## First run
 
-1. Download the archive for your OS for **__the last release__**.
+1. Download the executable for your OS for **__the last release__**.
 2. Just put the executable file in your filesystem and run it.
 3. You will be asked for questions and the the configuration directory will be created.
 4. By default a configuration subdirectory will be created in the same directory as the executable file. If you want to use another path, use the command line argument -c to specify it.

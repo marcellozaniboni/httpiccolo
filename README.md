@@ -19,7 +19,7 @@ The administration web interface can certainly be improved before the version 1.
 
 ## First run
 
-1. Download the executable for your OS.
+1. [Download](https://github.com/marcellozaniboni/httpiccolo/releases) the executable for your OS.
 3. Just put the executable file in your filesystem and run it.
 4. You will be asked for questions and the the configuration directory will be created.
 5. By default a configuration subdirectory will be created in the same directory as the executable file. If you want to use another path, use the command line argument -c to specify it.

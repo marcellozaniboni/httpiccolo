@@ -30,7 +30,7 @@ The administration web interface can certainly be improved before the version 1.
 * [Windows x86 64-bit](https://github.com/marcellozaniboni/httpiccolo/releases/download/0.8/httpiccolo-0.8-windows-x86-64.zip)
 * [Linux x86 64-bit](https://github.com/marcellozaniboni/httpiccolo/releases/download/0.8/httpiccolo-0.8-linux-x86-64.tgz)
 * [Linux ARM 64-bit](https://github.com/marcellozaniboni/httpiccolo/releases/download/0.8/httpiccolo-0.8-linux-arm64.tgz)
-* [Linux ARM 32-bit (armv6l)](https://github.com/marcellozaniboni/httpiccolo/releases/download/0.8/httpiccolo-0.1-linux-arm32.tgz)
+* [Linux ARM 32-bit](https://github.com/marcellozaniboni/httpiccolo/releases/download/0.8/httpiccolo-0.1-linux-arm32.tgz) (armv6l)
 
 ## How to build
 

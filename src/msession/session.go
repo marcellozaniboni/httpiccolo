@@ -41,7 +41,7 @@ var sessionRandomNeedsSeed = true
 type Session struct {
 	id             string
 	expiry         time.Time
-	items          map[string]string
+	items          map[string]string // TODO: turn this into a sync.Map to avoid concurrency for the same client
 	responseWriter http.ResponseWriter
 }
 

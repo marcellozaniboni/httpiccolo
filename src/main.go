@@ -23,6 +23,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -36,7 +37,10 @@ import (
 )
 
 // this will be inserted as a comment in admin pages
-const httpiccoloVersion string = "0.8"
+const httpiccoloVersion string = "0.9.dev"
+
+// this is used for version checking
+const httpiccoloProductId string = "5d72b94e-255f-48d9-b2a9-0d3d2ef97df5"
 
 // configuration contains the main configuration
 var configuration map[string]string
@@ -103,8 +107,8 @@ func showLicenseTerms() {
  You should have received a copy of the GNU General Public
  License along with this program; if not, you can visit
  https://www.gnu.org/licenses/
- or write to Free Software Foundation, Inc.,
- 675 Mass Ave, Cambridge, MA 02139, USA.`)
+ or write to Free Software Foundation, Inc., 675 Mass Ave,
+ Cambridge, MA 02139, USA.`)
 }
 
 func main() {
@@ -112,12 +116,43 @@ func main() {
 
 	configpathPtr := flag.String("c", "", "use a custom configuration directory\nif it doesn't exist, it will be created\nif it exists, it must already contain config files")
 	licensePtr := flag.Bool("l", false, "show license terms and exit")
+	checkNewVersionPtr := flag.Bool("v", false, "check for a new version")
 	// printConfigPtr := flag.Bool("p", false, "print current configuration and exit")
 
 	flag.Parse()
 
 	if *licensePtr {
 		showLicenseTerms()
+		time.Sleep(2 * time.Second)
+		os.Exit(0)
+	}
+
+	if *checkNewVersionPtr {
+
+		resp, err := http.Get("https://www.marcellozaniboni.net/release/" + httpiccoloProductId)
+		if err != nil {
+			mutils.FatalError("Cannot run http request", err)
+		}
+		defer resp.Body.Close()
+
+		if resp.StatusCode != 200 {
+			fmt.Println("Sorry, I cannot check for new a version.")
+			fmt.Println("HTTP response status:", resp.Status)
+			time.Sleep(4 * time.Second)
+			os.Exit(1)
+		}
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			mutils.FatalError("Cannot read http response", err)
+		}
+		lastVersion := string(body)
+
+		if lastVersion == httpiccoloVersion {
+			fmt.Println("This is the last available official version.")
+		} else {
+			fmt.Println("Current release: " + httpiccoloVersion + ", last official release: " + lastVersion)
+		}
+
 		time.Sleep(2 * time.Second)
 		os.Exit(0)
 	}

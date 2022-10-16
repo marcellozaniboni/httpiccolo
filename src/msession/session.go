@@ -191,7 +191,6 @@ func randomSessionId() string {
 		sessionRandomNeedsSeed = false
 	}
 
-	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < 32; i++ {
 		n := rand.Intn(256)
 		onebyte := fmt.Sprintf("%X", n)

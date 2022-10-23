@@ -36,7 +36,12 @@ import (
 func configWizard(directory string) {
 
 	fmt.Println("NEW CONFIGURATION")
-	fmt.Println("Please answer four questions.")
+	fmt.Println("It seems it is the first time you run httpiccolo. You can get help")
+	fmt.Println("about command line parameters exiting with ctrl-c and the running:")
+	fmt.Println("")
+	fmt.Println("\thttpiccolo -h")
+	fmt.Println("")
+	fmt.Println("Please answer just four questions to configure httpiccolo.")
 
 	// admin username
 	fmt.Print("\nAdministrator username (e.g. many people use \"admin\")? ")

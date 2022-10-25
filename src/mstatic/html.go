@@ -29,6 +29,9 @@ func GetHtmlHeader(pageTitle string, small bool, restartNeeded bool, showLoggedU
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="description" content="httpiccolo">
 		<link rel="icon" href="/favicon.ico" sizes="32x32" type="image/vnd.microsoft.icon">
+		<link rel="icon" href="/favicon-128.png" sizes="128x128">
+		<link rel="icon" href="/favicon-180.png" sizes="180x180">
+		<link rel="icon" href="/favicon-192.png" sizes="192x192">
 		<title>[pageTitle]</title>
 		<style>[w3css]</style>
 	</head>

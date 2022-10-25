@@ -87,7 +87,23 @@ func httpGenaralHandler(w http.ResponseWriter, r *http.Request) {
 	case "/favicon.ico":
 		w.Header().Set("Content-Disposition", "attachment; filename=favicon.ico")
 		w.Header().Set("Content-Type", "application/octet-stream")
-		w.Write(mstatic.ImgFavicon)
+		w.Write(mstatic.ImgFavicon32ico)
+	case "/favicon-32.png":
+		w.Header().Set("Content-Disposition", "attachment; filename=favicon-32.png")
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Write(mstatic.ImgFavicon32png)
+	case "/favicon-128.png":
+		w.Header().Set("Content-Disposition", "attachment; filename=favicon-128.png")
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Write(mstatic.ImgFavicon128png)
+	case "/favicon-180.png":
+		w.Header().Set("Content-Disposition", "attachment; filename=favicon-180.png")
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Write(mstatic.ImgFavicon180png)
+	case "/favicon-192.png":
+		w.Header().Set("Content-Disposition", "attachment; filename=favicon-192.png")
+		w.Header().Set("Content-Type", "application/octet-stream")
+		w.Write(mstatic.ImgFavicon192png)
 	default:
 		// directory/file browsing
 		webgenericbrowsing(w, r)

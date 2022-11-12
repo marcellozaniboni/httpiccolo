@@ -72,6 +72,8 @@ func httpGenaralHandler(w http.ResponseWriter, r *http.Request) {
 		webchangepasswordaction(w, r) // action for changing the password to a single username
 	case "/" + configuration["admin_path"] + "/new_user":
 		webnewuseraction(w, r) // action for new user creation
+	case "/" + configuration["admin_path"] + "/new_user_form":
+		webnewuserform(w, r) // web page for configuring a new user
 	case "/" + configuration["admin_path"] + "/delete_user":
 		webdeleteuseraction(w, r) // action for deleting a user
 	case "/" + configuration["admin_path"] + "/new_perm":

@@ -73,7 +73,10 @@ func GetHtmlUserTable(users map[string]string) string {
 		retval += "</td></tr>\n"
 	}
 	retval += `<table><p>
-    <input id="action_button" type="button" value="&nbsp;&nbsp;Add user&nbsp;&nbsp;" class="w3-button w3-border w3-border-blue w3-light-grey" onclick="createUser()"/></p>`
+	<!-- old deprecated way
+    <input id="action_button" type="button" value="&nbsp;&nbsp;Add user&nbsp;&nbsp;" class="w3-button w3-border w3-border-blue w3-light-grey" onclick="createUser()"/></p>
+	-->
+	<input id="action_button" type="submit" value="&nbsp;&nbsp;Add user&nbsp;&nbsp;" class="w3-button w3-border w3-border-blue w3-light-grey" onclick="document.location.href='[new_user_form_url]'"/>	`
 	return retval
 }
 
@@ -87,9 +90,6 @@ func GetHtmlPermissionTable(permissions map[string]string) string {
 		retval += "</td></tr>"
 	}
 	retval += `</table><p>
-	<!-- old deprecated way
-    <input id="action_button" type="submit" value="&nbsp;&nbsp;Add permission&nbsp;&nbsp;" class="w3-button w3-border w3-border-blue w3-light-grey" onclick="createPermission()"/>
-	-->
 	<input id="action_button" type="submit" value="&nbsp;&nbsp;Add permission&nbsp;&nbsp;" class="w3-button w3-border w3-border-blue w3-light-grey" onclick="document.location.href='[new_perm_form_url]'"/>
 	</p>`
 	return retval
@@ -123,6 +123,7 @@ func GetHtmlCounterAfterDaoAction(redirectpath string) string {
 
 const HtmlAdminJavascriptAndHiddenForms string = `
 <script type="text/javascript" charset="utf-8">
+	/////// deprecated funztion, to be removed soon - BEGIN
 	function createUser() {
 		var usr = window.prompt("Insert the username", "<username>");
 		if (usr == null || usr == "" || usr == "<username>") {
@@ -146,6 +147,7 @@ const HtmlAdminJavascriptAndHiddenForms string = `
 			}
 		}
 	}
+	/////// deprecated funztion, to be removed soon - END
 
 	function changePassword(username) {
 		var pwd = window.prompt(
@@ -186,10 +188,12 @@ const HtmlAdminJavascriptAndHiddenForms string = `
 	<input id="change_password_usr" name="change_password_usr" type="hidden" value=""/>
 	<input id="change_password_pwd" name="change_password_pwd" type="hidden" value=""/>
 </form>
+<!-- ##### TODO - obsolete code: remove this
 <form id="new_user_form" name="new_user_form" action="[new_user_action]" method="post">
 	<input id="new_user_usr" name="new_user_usr" type="hidden" value=""/>
 	<input id="new_user_pwd" name="new_user_pwd" type="hidden" value=""/>
 </form>
+-->
 <form id="delete_user_form" name="delete_user_form" action="[delete_user_action]" method="post">
 	<input id="delete_user_usr" name="delete_user_usr" type="hidden" value=""/>
 </form>

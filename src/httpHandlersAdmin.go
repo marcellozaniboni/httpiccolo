@@ -135,12 +135,12 @@ func webnewuseraction(w http.ResponseWriter, r *http.Request) {
 	username, isAdmin := verifyLoggedUser(w, r)
 	if !isAdmin {
 		// login needed
-		log.Println("new user action, access denied for user \"" + username + "\"")
+		log.Println("admin page - new user action, access denied for user \"" + username + "\"")
 		fmt.Fprintln(w, "access denied for user \""+username+"\"")
 	} else {
 		r.ParseForm()
 		form := r.Form
-		log.Println("admin page - new user, ", form)
+		log.Println("admin page - new user action, ", form)
 		var u, p string
 		for k, v := range form {
 			if k == "new_user_usr" {
@@ -154,6 +154,8 @@ func webnewuseraction(w http.ResponseWriter, r *http.Request) {
 			// note that if the username already exists, the existing item is overwritten
 			users[u] = mutils.HashPassword(p)
 			mdao.WriteUsersJson(configpath, users)
+		} else {
+			log.Println("admin page - new user action - error: user or password are empty; nothing to save")
 		}
 		fmt.Fprintln(w, mstatic.GetHtmlHeader("httpiccolo - settings - new user", false, restartneeded, false))
 		fmt.Fprintln(w, mstatic.GetHtmlCounterAfterDaoAction("/"+configuration["admin_path"]))
@@ -269,6 +271,7 @@ func webadminconsole(w http.ResponseWriter, r *http.Request) {
 		html = strings.Replace(html, "[new_user_action]", "/"+configuration["admin_path"]+"/new_user", 1)
 		html = strings.Replace(html, "[delete_user_action]", "/"+configuration["admin_path"]+"/delete_user", 1)
 		html = strings.Replace(html, "[new_perm_form_url]", "/"+configuration["admin_path"]+"/new_perm_form"+"?nonache="+mutils.RandomId(noCacheIdLength), 1)
+		html = strings.Replace(html, "[new_user_form_url]", "/"+configuration["admin_path"]+"/new_user_form"+"?nonache="+mutils.RandomId(noCacheIdLength), 1)
 		html = strings.Replace(html, "[change_permusers_action]", "/"+configuration["admin_path"]+"/change_perm", 1)
 		html = strings.Replace(html, "[delete_perm_action]", "/"+configuration["admin_path"]+"/delete_perm", 1)
 		fmt.Fprintln(w, html)
@@ -306,7 +309,6 @@ func webnewpermform(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, err)
 		fmt.Fprintln(w, "<br/>&nbsp;<br/><a href=\"/"+configuration["admin_path"]+"?nonache="+mutils.RandomId(noCacheIdLength)+"\">Go back to the settings</a>")
 	} else {
-		fmt.Fprintln(w, "<form id=\"blablabla\" name=\"blablabla\" action=\"/admin/new_perm_blablabla\" method=\"post\">")
 		fmt.Fprintln(w, "<p>Select the users that will access the private directory:</p>")
 		fmt.Fprintln(w, "<table class=\"w3-table-all\">")
 		fmt.Fprintln(w, "<tr><th>configured user</th></tr>")
@@ -342,44 +344,97 @@ func webnewpermform(w http.ResponseWriter, r *http.Request) {
 			id++
 		}
 		fmt.Fprintln(w, "</table>")
-		fmt.Fprintln(w, "</form>")
 	}
 	fmt.Fprintln(w, "<div style=\"margin-top: 16px; margin-bottom: 6px\" align=\"center\"><a href=\"../"+configuration["admin_path"]+"?nonache="+mutils.RandomId(noCacheIdLength)+"\">Cancel (bo back)</a>")
 	fmt.Fprintln(w, "&nbsp;&nbsp;&nbsp;<a href=\"#\" onclick=\"createPermission()\">Save</a></div>")
 	fmt.Fprintln(w, `
-<form id="new_perm_form" name="new_perm_form" action="/`+configuration["admin_path"]+`/new_perm" method="post">
-<input id="new_perm_path" name="new_perm_path" type="hidden" value=""/>
-<input id="new_perm_userlist" name="new_perm_userlist" type="hidden" value=""/></form>
-<script type="text/javascript" charset="utf-8">
-function createPermission() {
-	var userlist = "";
-	for (var i = 0; i < `+strconv.Itoa(len(users))+`; i++) {
-		if (document.getElementById("usr_" + i).checked) {
-			if (userlist != "") userlist += ",";
-			userlist += document.getElementById("usr_" + i).value;
+	<form id="new_perm_form" name="new_perm_form" action="/`+configuration["admin_path"]+`/new_perm" method="post">
+	<input id="new_perm_path" name="new_perm_path" type="hidden" value=""/>
+	<input id="new_perm_userlist" name="new_perm_userlist" type="hidden" value=""/></form>
+	<script type="text/javascript" charset="utf-8">
+	function createPermission() {
+		var userlist = "";
+		for (var i = 0; i < `+strconv.Itoa(len(users))+`; i++) {
+			if (document.getElementById("usr_" + i).checked) {
+				if (userlist != "") userlist += ",";
+				userlist += document.getElementById("usr_" + i).value;
+			}
 		}
-	}
-	var path = "";
-	for (var i=0; i < `+strconv.Itoa(directoryCount)+`; i++) {
-		if (document.getElementById("dir_" + i).checked) {
-			path = document.getElementById("dir_" + i).value;
-			break;
+		var path = "";
+		for (var i=0; i < `+strconv.Itoa(directoryCount)+`; i++) {
+			if (document.getElementById("dir_" + i).checked) {
+				path = document.getElementById("dir_" + i).value;
+				break;
+			}
 		}
+		if (userlist == "") {
+			alert("Select one or more users.");
+			return;
+		}
+		if (path == "") {
+			alert("Select a directory.");
+			return;
+		}
+		document.getElementById("new_perm_path").value = path;
+		document.getElementById("new_perm_userlist").value = userlist;
+		document.getElementById("new_perm_form").submit();
 	}
-	if (userlist == "") {
-		alert("Select one or more users.");
-		return;
-	}
-	if (path == "") {
-		alert("Select a directory.");
-		return;
-	}
-	document.getElementById("new_perm_path").value = path;
-	document.getElementById("new_perm_userlist").value = userlist;
-	document.getElementById("new_perm_form").submit();
-}
-</script>`)
+	</script>`)
 
 	fmt.Fprintln(w, "<!-- httpiccolo version "+httpiccoloVersion+" -->")
+	fmt.Fprintln(w, mstatic.HtmlFooter)
+}
+
+func webnewuserform(w http.ResponseWriter, r *http.Request) {
+	username, isAdmin := verifyLoggedUser(w, r)
+	if !isAdmin {
+		// login needed
+		log.Println("new user form, access denied for user \"" + username + "\"")
+		webloginform(w, r, username)
+		return
+	}
+	log.Println("new user form, user \"" + username + "\"")
+	fmt.Fprintln(w, mstatic.GetHtmlHeader("httpiccolo - settings - new user", false, restartneeded, false))
+
+	fmt.Fprintln(w, "<table class='w3-bordered w3-hoverable'>")
+	fmt.Fprintln(w, "<tr>")
+	fmt.Fprintln(w, "<td style='vertical-align: middle'>username&nbsp;&nbsp;</td>")
+	fmt.Fprintln(w, "<td style='vertical-align: middle'><input class=\"w3-input w3-pale-yellow\" id=\"username\" name=\"username\" type=\"text\" maxlength=\"30\"/></td>")
+	fmt.Fprintln(w, "</tr>")
+	fmt.Fprintln(w, "<tr>")
+	fmt.Fprintln(w, "<td style='vertical-align: middle'>password&nbsp;&nbsp;</td>")
+	fmt.Fprintln(w, "<td style='vertical-align: middle'><input class=\"w3-input w3-pale-yellow\" id=\"password\" name=\"password\" type=\"password\" maxlength=\"512\"/></td>")
+	fmt.Fprintln(w, "</tr>")
+	// fmt.Fprintln(w, "<tr>")
+	// fmt.Fprintln(w, "<td style='vertical-align: middle'>repeat password&nbsp;&nbsp;</td>")
+	// fmt.Fprintln(w, "<td style='vertical-align: middle'><input class=\"w3-input w3-pale-yellow\" id=\"password2\" name=\"password2\" type=\"password\" maxlength=\"512\"/></td>")
+	// fmt.Fprintln(w, "</tr>")
+	fmt.Fprintln(w, "</table>")
+
+	fmt.Fprintln(w, "<!-- httpiccolo version "+httpiccoloVersion+" -->")
+	fmt.Fprintln(w, "<div style=\"margin-top: 16px; margin-bottom: 6px\"><a href=\"../"+configuration["admin_path"]+"?nonache="+mutils.RandomId(noCacheIdLength)+"\">Cancel (bo back)</a>")
+	fmt.Fprintln(w, "&nbsp;&nbsp;&nbsp;<a href=\"#\" onclick=\"createUser()\">Save</a></div>")
+
+	fmt.Fprintln(w, `
+	<form id="new_user_form" name="new_user_form" action="/`+configuration["admin_path"]+`/new_user" method="post">
+	<input id="new_user_usr" name="new_user_usr" type="hidden" value=""/>
+	<input id="new_user_pwd" name="new_user_pwd" type="hidden" value=""/>
+	<script type="text/javascript" charset="utf-8">
+	function createUser() {
+		username = document.getElementById("username").value;
+		password = document.getElementById("password").value;
+		if (username == "" || password == "") {
+			alert("Error: username and password cannot be empty.");
+			return;
+		}
+		if (username.length < 4 || password.length < 5) {
+			alert("Error:\n- username must be at least 4 character long;\n- password must be at least 5 character long.");
+			return;
+		}
+		document.getElementById("new_user_usr").value = username;
+		document.getElementById("new_user_pwd").value = password;
+		document.getElementById("new_user_form").submit();
+	}
+	</script>`)
 	fmt.Fprintln(w, mstatic.HtmlFooter)
 }

@@ -123,31 +123,6 @@ func GetHtmlCounterAfterDaoAction(redirectpath string) string {
 
 const HtmlAdminJavascriptAndHiddenForms string = `
 <script type="text/javascript" charset="utf-8">
-	/////// deprecated funztion, to be removed soon - BEGIN
-	function createUser() {
-		var usr = window.prompt("Insert the username", "<username>");
-		if (usr == null || usr == "" || usr == "<username>") {
-			return; // nothing to do here
-		}
-		if (usr.length < 3) {
-			alert("Please retry: the username is too short.")
-			return;
-		}
-		var pwd = window.prompt(
-			"Insert password for " + usr +
-			"\nWarining: the password will hot be hidden in this input dialog, but from now on it will always be hashed!",
-			"<change_me>");
-		if (pwd != null && pwd != "" && pwd != "<change_me>") {
-			if (pwd.length < 5) {
-				alert("Please retry: the password is too short.")
-			} else {
-				document.getElementById("new_user_usr").value = usr;
-				document.getElementById("new_user_pwd").value = pwd;
-				document.getElementById("new_user_form").submit();
-			}
-		}
-	}
-	/////// deprecated funztion, to be removed soon - END
 
 	function changePassword(username) {
 		var pwd = window.prompt(
@@ -188,12 +163,6 @@ const HtmlAdminJavascriptAndHiddenForms string = `
 	<input id="change_password_usr" name="change_password_usr" type="hidden" value=""/>
 	<input id="change_password_pwd" name="change_password_pwd" type="hidden" value=""/>
 </form>
-<!-- ##### TODO - obsolete code: remove this
-<form id="new_user_form" name="new_user_form" action="[new_user_action]" method="post">
-	<input id="new_user_usr" name="new_user_usr" type="hidden" value=""/>
-	<input id="new_user_pwd" name="new_user_pwd" type="hidden" value=""/>
-</form>
--->
 <form id="delete_user_form" name="delete_user_form" action="[delete_user_action]" method="post">
 	<input id="delete_user_usr" name="delete_user_usr" type="hidden" value=""/>
 </form>

@@ -37,7 +37,7 @@ import (
 )
 
 // this will be inserted as a comment in admin pages
-const httpiccoloVersion string = "0.9.dev"
+const httpiccoloVersion string = "0.9"
 
 // this is used for version checking
 const httpiccoloProductId string = "5d72b94e-255f-48d9-b2a9-0d3d2ef97df5"
@@ -64,28 +64,45 @@ var userDefinedConfigDir = false
 func httpGenaralHandler(w http.ResponseWriter, r *http.Request) {
 	httppath := r.URL.Path
 	switch httppath {
+
+	////**** Admin web pages and actions ****////
+	// display the administrator console
 	case "/" + configuration["admin_path"]:
-		webadminconsole(w, r) // display the administrator console
+		webadminconsole(w, r)
+	// action for saving configuration
 	case "/" + configuration["admin_path"] + "/save_config":
-		websaveconfigurationaction(w, r) // action for saving configuration
+		websaveconfigurationaction(w, r)
+	// action for changing the password to a single username
 	case "/" + configuration["admin_path"] + "/change_password":
-		webchangepasswordaction(w, r) // action for changing the password to a single username
+		webchangepasswordaction(w, r)
+	// action for new user creation
 	case "/" + configuration["admin_path"] + "/new_user":
-		webnewuseraction(w, r) // action for new user creation
+		webnewuseraction(w, r)
+	// web page for configuring a new user
 	case "/" + configuration["admin_path"] + "/new_user_form":
-		webnewuserform(w, r) // web page for configuring a new user
+		webnewuserform(w, r)
+	// action for deleting a user
 	case "/" + configuration["admin_path"] + "/delete_user":
-		webdeleteuseraction(w, r) // action for deleting a user
+		webdeleteuseraction(w, r)
+	// action for new permission
 	case "/" + configuration["admin_path"] + "/new_perm":
-		webnewpermaction(w, r) // action for new permission
+		webnewpermaction(w, r)
+	// web page for configuring a new permission
 	case "/" + configuration["admin_path"] + "/new_perm_form":
-		webnewpermform(w, r) // web page for configuring a new permission
+		webnewpermform(w, r)
+	// action for changing the userlist to a single permission
 	case "/" + configuration["admin_path"] + "/change_perm":
-		webchangepermaction(w, r) // action for changing the userlist to a single permission
+		webchangepermaction(w, r)
+	// action for deleting a single permission
 	case "/" + configuration["admin_path"] + "/delete_perm":
-		webdeleteperm(w, r) // action for deleting a single permission
+		webdeleteperm(w, r)
+	// action called by the login form
+
+	////**** Login ****////
 	case "/login_action":
-		webloginaction(w, r) // action called by the login form
+		webloginaction(w, r)
+
+	////**** Favicon management ****////
 	case "/favicon.ico":
 		w.Header().Set("Content-Disposition", "attachment; filename=favicon.ico")
 		w.Header().Set("Content-Type", "application/octet-stream")
@@ -106,6 +123,8 @@ func httpGenaralHandler(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Disposition", "attachment; filename=favicon-192.png")
 		w.Header().Set("Content-Type", "application/octet-stream")
 		w.Write(mstatic.ImgFavicon192png)
+
+	////**** File serving ****////
 	default:
 		// directory/file browsing
 		webgenericbrowsing(w, r)
